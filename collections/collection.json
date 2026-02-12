@@ -1,0 +1,343 @@
+{
+  "info": {
+    "name": "GoREST API Tests",
+    "_postman_id": "gorest-api-tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET /public/v2/users - returns 200 with list of users",
+          "request": {
+            "method": "GET",
+            "url": "https://gorest.co.in/public/v2/users"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a non-empty JSON array', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.be.an('array');",
+                  "  pm.expect(jsonData.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('Each user has required fields with correct types', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (user) {",
+                  "    pm.expect(user).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(user).to.have.property('name').that.is.a('string');",
+                  "    pm.expect(user).to.have.property('email').that.is.a('string');",
+                  "    pm.expect(user).to.have.property('gender').that.is.a('string');",
+                  "    pm.expect(user).to.have.property('status').that.is.a('string');",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Gender values are valid', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (user) {",
+                  "    pm.expect(user.gender).to.be.oneOf(['male', 'female']);",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Status values are valid', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (user) {",
+                  "    pm.expect(user.status).to.be.oneOf(['active', 'inactive']);",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Content-Type is application/json', function () {",
+                  "  pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');",
+                  "});",
+                  "",
+                  "pm.test('Pagination headers are present', function () {",
+                  "  pm.response.to.have.header('x-pagination-limit');",
+                  "  pm.response.to.have.header('x-pagination-page');",
+                  "  pm.response.to.have.header('x-pagination-pages');",
+                  "  pm.response.to.have.header('x-pagination-total');",
+                  "});",
+                  "",
+                  "pm.test('Default page size is 10', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.length).to.eql(10);",
+                  "  pm.expect(parseInt(pm.response.headers.get('x-pagination-limit'))).to.eql(10);",
+                  "});",
+                  "",
+                  "pm.test('Email format is valid for all users', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  var emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;",
+                  "  jsonData.forEach(function (user) {",
+                  "    pm.expect(user.email).to.match(emailRegex);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /public/v2/users?page=2 - pagination works",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users?page=2",
+              "protocol": "https",
+              "host": ["gorest", "co", "in"],
+              "path": ["public", "v2", "users"],
+              "query": [{ "key": "page", "value": "2" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Page 2 is returned', function () {",
+                  "  pm.expect(parseInt(pm.response.headers.get('x-pagination-page'))).to.eql(2);",
+                  "});",
+                  "",
+                  "pm.test('Response is a non-empty array', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.be.an('array');",
+                  "  pm.expect(jsonData.length).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /public/v2/users - response time is acceptable",
+          "request": {
+            "method": "GET",
+            "url": "https://gorest.co.in/public/v2/users"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response time is under 2000ms', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "GET /public/v2/posts - returns 200 with list of posts",
+          "request": {
+            "method": "GET",
+            "url": "https://gorest.co.in/public/v2/posts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a non-empty JSON array', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.be.an('array');",
+                  "  pm.expect(jsonData.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('Each post has required fields with correct types', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (post) {",
+                  "    pm.expect(post).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(post).to.have.property('user_id').that.is.a('number');",
+                  "    pm.expect(post).to.have.property('title').that.is.a('string');",
+                  "    pm.expect(post).to.have.property('body').that.is.a('string');",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Post title and body are non-empty', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (post) {",
+                  "    pm.expect(post.title.length).to.be.above(0);",
+                  "    pm.expect(post.body.length).to.be.above(0);",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Content-Type is application/json', function () {",
+                  "  pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');",
+                  "});",
+                  "",
+                  "pm.test('Pagination headers are present', function () {",
+                  "  pm.response.to.have.header('x-pagination-limit');",
+                  "  pm.response.to.have.header('x-pagination-total');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User Posts",
+      "item": [
+        {
+          "name": "GET /public/v2/users/7373665/posts - returns 200",
+          "request": {
+            "method": "GET",
+            "url": "https://gorest.co.in/public/v2/users/7373665/posts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a JSON array', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('If posts exist, they have correct structure', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  if (jsonData.length > 0) {",
+                  "    jsonData.forEach(function (post) {",
+                  "      pm.expect(post).to.have.property('id').that.is.a('number');",
+                  "      pm.expect(post).to.have.property('user_id').that.is.a('number');",
+                  "      pm.expect(post).to.have.property('title').that.is.a('string');",
+                  "      pm.expect(post).to.have.property('body').that.is.a('string');",
+                  "      pm.expect(post.user_id).to.eql(7373665);",
+                  "    });",
+                  "  }",
+                  "});",
+                  "",
+                  "pm.test('Content-Type is application/json', function () {",
+                  "  pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /public/v2/users/0/posts - non-existent user returns 200 with empty array",
+          "request": {
+            "method": "GET",
+            "url": "https://gorest.co.in/public/v2/users/0/posts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an empty array', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.be.an('array');",
+                  "  pm.expect(jsonData.length).to.eql(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Todos",
+      "item": [
+        {
+          "name": "GET /public/v2/todos - returns 200 with list of todos",
+          "request": {
+            "method": "GET",
+            "url": "https://gorest.co.in/public/v2/todos"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a non-empty JSON array', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.be.an('array');",
+                  "  pm.expect(jsonData.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('Each todo has required fields with correct types', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (todo) {",
+                  "    pm.expect(todo).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(todo).to.have.property('user_id').that.is.a('number');",
+                  "    pm.expect(todo).to.have.property('title').that.is.a('string');",
+                  "    pm.expect(todo).to.have.property('due_on').that.is.a('string');",
+                  "    pm.expect(todo).to.have.property('status').that.is.a('string');",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Todo status values are valid', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  jsonData.forEach(function (todo) {",
+                  "    pm.expect(todo.status).to.be.oneOf(['pending', 'completed']);",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Due dates are in valid ISO 8601 format', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  var isoRegex = /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2}$/;",
+                  "  jsonData.forEach(function (todo) {",
+                  "    pm.expect(todo.due_on).to.match(isoRegex);",
+                  "  });",
+                  "});",
+                  "",
+                  "pm.test('Content-Type is application/json', function () {",
+                  "  pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');",
+                  "});",
+                  "",
+                  "pm.test('Pagination headers are present', function () {",
+                  "  pm.response.to.have.header('x-pagination-limit');",
+                  "  pm.response.to.have.header('x-pagination-total');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

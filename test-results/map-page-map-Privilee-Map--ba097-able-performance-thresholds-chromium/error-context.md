@@ -1,0 +1,78 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner:
+    - button "Open menu" [ref=e3] [cursor=pointer]:
+      - img [ref=e4]
+    - link [ref=e6] [cursor=pointer]:
+      - /url: /
+      - img [ref=e7]
+  - generic [ref=e10]:
+    - button "Close menu" [ref=e11] [cursor=pointer]:
+      - img [ref=e12]
+    - generic [ref=e16]:
+      - link "Home" [ref=e17] [cursor=pointer]:
+        - /url: /
+      - link "Pool & Beach" [ref=e18] [cursor=pointer]:
+        - /url: /resorts
+      - link "Gym & Fitness" [ref=e19] [cursor=pointer]:
+        - /url: /fitness
+      - link "Family" [ref=e20] [cursor=pointer]:
+        - /url: /family
+      - link "Dining" [ref=e21] [cursor=pointer]:
+        - /url: /dining
+      - link "Corporate" [ref=e22] [cursor=pointer]:
+        - /url: /corporate
+      - link "View venues" [ref=e23] [cursor=pointer]:
+        - /url: /map
+      - link "Join now" [ref=e24] [cursor=pointer]:
+        - /url: /signup
+    - generic [ref=e26]:
+      - link "Privilee Insider" [ref=e27] [cursor=pointer]:
+        - /url: https://blog.privilee.ae/
+      - link "FAQs" [ref=e28] [cursor=pointer]:
+        - /url: /faqs
+      - link "Careers" [ref=e29] [cursor=pointer]:
+        - /url: /careers
+      - link "Contact us" [ref=e30] [cursor=pointer]:
+        - /url: /contact
+  - generic [ref=e31]:
+    - button "Pool & beach" [ref=e33] [cursor=pointer]
+    - button "Fitness" [ref=e34] [cursor=pointer]
+    - button "Family activities" [ref=e35] [cursor=pointer]
+    - button "Dining" [ref=e36] [cursor=pointer]
+    - button "Waterparks" [ref=e37] [cursor=pointer]
+  - generic [ref=e41]:
+    - button [ref=e42]:
+      - img [ref=e43]
+    - textbox "Loading..." [ref=e46]
+  - main [ref=e47]:
+    - generic [ref=e48]:
+      - heading "Loading venues..." [level=3] [ref=e49]
+      - button "Filters" [ref=e50] [cursor=pointer]:
+        - img [ref=e51]
+        - text: Filters
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - button "Close modal window":
+              - img
+            - generic:
+              - heading "Filter your search" [level=2]
+              - generic:
+                - heading "Location" [level=3]
+              - button "Show 0 venues"
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - button "Close modal window":
+              - img
+  - link "Join Privilee today!" [ref=e94] [cursor=pointer]:
+    - /url: /signup
+  - generic [ref=e96]: Loading venues...
+```
